@@ -3,6 +3,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var users = {};
+
 app.use(express.static('static'));
 
 app.get('/', function(req, res){
@@ -11,6 +13,7 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  console.log(socket.id);
   socket.on('disconnect', function(){
 	  console.log('user disconnected');
   });
@@ -23,3 +26,5 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+
+// function newUser()

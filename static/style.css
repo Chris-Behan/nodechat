@@ -19,6 +19,7 @@ body {
 	width: 70%;
 	height: 100%;
 	border-style: solid;
+	justify-content: flex-end;
 }
 #user-container {
 	border-style: solid;
@@ -26,9 +27,8 @@ body {
 	width: 30%;
 }
 #message-form {
-
 	display: flex;
-	align-items: stretch;
+	min-height: 5%;
 	width: 98%;
 	padding: 1%;
 	justify-content: center;
@@ -37,10 +37,14 @@ body {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	height: 100%;
+	display: inline-block;
 	overflow: auto;
 }
-#messages li { padding: 5px 10px; }
+#messages li {
+	padding: 5px 10px;
+	white-space: normal;
+	word-wrap: break-word;
+}
 #messages li:nth-child(odd) { background: #eee; }
 #m {
 	flex: 2;

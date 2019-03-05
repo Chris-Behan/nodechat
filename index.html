@@ -34,6 +34,9 @@
 <script>
   $(function () {
     var socket = io();
+	socket.on('connect', () => {
+		console.log(socket.id);
+	});
     $('form').submit(function(e){
       e.preventDefault(); // prevents page reloading
       socket.emit('chat message', $('#m').val());
