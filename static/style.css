@@ -1,0 +1,58 @@
+html,
+body {
+	font: 13px Arial;
+	height: 100%;
+	margin: 0;
+}
+
+#main-panel {
+	display: flex;
+	align-content: flex-start;
+	justify-content: space-between;
+	height: 95%;
+	padding: 1%;
+}
+#message-container {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+	width: 70%;
+	height: 100%;
+	border-style: solid;
+}
+#user-container {
+	border-style: solid;
+	margin: auto;
+	width: 30%;
+}
+#message-form {
+
+	display: flex;
+	align-items: stretch;
+	width: 98%;
+	padding: 1%;
+	justify-content: center;
+}
+#messages {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: auto;
+}
+#messages li { padding: 5px 10px; }
+#messages li:nth-child(odd) { background: #eee; }
+#m {
+	flex: 2;
+	border: 0.5;
+	padding: 10px;
+}
+#sendbutton {
+	flex: 1;
+}
+
+#user-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
