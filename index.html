@@ -37,6 +37,13 @@
 	socket.on('connect', () => {
 		console.log(socket.id);
 	});
+	socket.on('user update', function(users){
+		$('#users').empty();
+		for (var i = 0; i < users.length; i++){
+			$('#users').append($('<li>').text(users[i].name));
+		}
+
+	});
     $('form').submit(function(e){
       e.preventDefault(); // prevents page reloading
       socket.emit('chat message', $('#m').val());
@@ -44,7 +51,11 @@
       return false;
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
+	  var time = new Date(msg.time);
+	  var mins = (time.getMinutes() < 10 ? '0' : "") + time.getMinutes();
+	  var timeString = time.getHours() + ":" + mins;
+
+      $('#messages').append($('<li>').text(timeString + " " + msg.nickname + ": " + msg.message));
     });
   });
 </script>
