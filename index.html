@@ -17,7 +17,9 @@
 
   <body>
 	  <div id="main-panel">
+
 		<div id="message-container">
+			<div id="userlabel"></div>
 			<ul tabindex="1" id="messages"></ul>
 		    <form id="message-form" action="">
 		    	<input id="m" autocomplete="off" />
@@ -25,7 +27,7 @@
 		    </form>
 		</div>
 		<div id="user-container">
-			<ul id="users"></ul>
+			<ul tabindex="1" id="users"></ul>
 		</div>
 	</div>
 
@@ -37,12 +39,24 @@
 	socket.on('connect', () => {
 		console.log(socket.id);
 	});
+	socket.on('log', function(messages){
+		for(var i = 0; i < messages.length; i++){
+			var msg = messages[i];
+			var time = new Date(msg.time);
+	  	  	var mins = (time.getMinutes() < 10 ? '0' : "") + time.getMinutes();
+	  	  	var timeString = time.getHours() + ":" + mins;
+	        $('#messages').append('<li>'+timeString + " " + '<span style="color: ' + msg.color +'">' +msg.nickname +'</span>' + ": " + msg.message + "</li>");
+		}
+	});
 	socket.on('user update', function(users){
 		$('#users').empty();
+		var myNickname;
 		for (var i = 0; i < users.length; i++){
 			$('#users').append($('<li>').text(users[i].name));
+			if(users[i].id === socket.id){
+				$('#userlabel').text("You are " + users[i].name);
+			}
 		}
-
 	});
     $('form').submit(function(e){
       e.preventDefault(); // prevents page reloading
@@ -54,8 +68,8 @@
 	  var time = new Date(msg.time);
 	  var mins = (time.getMinutes() < 10 ? '0' : "") + time.getMinutes();
 	  var timeString = time.getHours() + ":" + mins;
-
-      $('#messages').append($('<li>').text(timeString + " " + msg.nickname + ": " + msg.message));
+	  $('#messages').append('<li>'+timeString + " " + '<span style="color: ' + msg.color +'">' +msg.nickname +'</span>' + ": " + msg.message + "</li>");
+      // $('#messages').append($('<li>').html(timeString + " " + <span style="color:blue">msg.nickname </span> + ": " + msg.message));
     });
   });
 </script>
