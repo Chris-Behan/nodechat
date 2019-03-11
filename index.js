@@ -14,24 +14,24 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
-  console.log(socket.id);
   io.to(socket.id).emit('log', messageQueue);
   newUser(socket.id);
   io.emit('user update', users);
   socket.on('disconnect', function(){
 	  disconnectUser(socket.id);
-	  console.log('user disconnected');
 	  io.emit('user update', users);
 
   });
+  socket.on('cookie', function(name){
+	  newNickname(socket.id, name);
+	  io.emit('user update', users);
+  })
   socket.on('chat message', function(msg){
 	if(msg.startsWith('/nickcolor')){
 		var color = "#" + msg.substring(11, msg.length);
 		newColor(socket.id, color);
 		io.emit('user update', users);
 	} else if(msg.startsWith('/nick')){
-		console.log(users);
 		var name = msg.substring(msg.indexOf('/nick') + 6, msg.length);
 		newNickname(socket.id, name);
 		io.emit('user update', users);
@@ -39,7 +39,6 @@ io.on('connection', function(socket){
 		var time = Date.now();
 		var nickname = users.find( user => user.id === socket.id ).name;
 		var rgb = users.find( user => user.id === socket.id ).rgb;
-		console.log(rgb);
 		var messageInfo = { "message": msg,
 	 						"time": time,
 						 	"nickname": nickname,
@@ -47,7 +46,6 @@ io.on('connection', function(socket){
 	    io.emit('chat message', messageInfo);
 		addToMsgQueue(messageInfo);
 	}
-	console.log(msg);
   });
 });
 
@@ -59,7 +57,6 @@ function newUser(socketid){
 	var name = "User" + userCounter;
 	userCounter += 1;
 	users.push({id: socketid, name: name, rgb: '#000000'});
-	console.log(users);
 }
 
 function uniqueNickname(name){
@@ -72,9 +69,7 @@ function uniqueNickname(name){
 	return true;
 }
 function newNickname(socketid, name){
-	console.log(name);
 	if(uniqueNickname(name)){
-		console.log("unique");
 		users.find(function(value){
 			if(value.id === socketid){
 				var indexToChange = users.indexOf(value);
@@ -93,18 +88,14 @@ function newColor(socketid, col){
 }
 
 function disconnectUser(socketid){
-	console.log(users);
 	var indexToDelete;
 	users.find(function(value){
 		if(value.id === socketid){
 			indexToDelete = users.indexOf(value);
-			console.log(value);
-			console.log("index to delete:" +indexToDelete);
 		}
 	});
 	users.splice(indexToDelete,1);
 	io.emit('user update', users);
-	console.log(users);
 }
 
 function addToMsgQueue(msg){
